@@ -9,8 +9,8 @@
       "order": 0,
       "_id": "1776836748789",
       "createdAt": "2026-04-22T05:45:48.789Z",
-      "updatedAt": "2026-04-22T08:04:45.010Z",
-      "showOnHome": true
+      "updatedAt": "2026-04-22T08:49:44.997Z",
+      "showOnHome": false
     },
     {
       "title": "Sabka sathi degital service",
@@ -21,7 +21,8 @@
       "order": 0,
       "_id": "1776844030911",
       "createdAt": "2026-04-22T07:47:10.911Z",
-      "updatedAt": "2026-04-22T07:47:10.911Z"
+      "updatedAt": "2026-04-22T08:50:02.914Z",
+      "showOnHome": true
     },
     {
       "title": "Skov Fashion",
@@ -75,10 +76,10 @@
       "tech": "nextjs , postgres , vps ",
       "link": "najima-mehandi-artist.in",
       "order": 0,
-      "showOnHome": true,
+      "showOnHome": false,
       "_id": "1776845252868",
       "createdAt": "2026-04-22T08:07:32.868Z",
-      "updatedAt": "2026-04-22T08:07:32.868Z"
+      "updatedAt": "2026-04-22T08:49:54.879Z"
     },
     {
       "title": "Mitti & Moongfali",

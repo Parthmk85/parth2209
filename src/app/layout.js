@@ -6,8 +6,11 @@ import ScrollProgress from "@/components/ScrollProgress";
 const firaCode = Fira_Code({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Parth Patel | Full-Stack Developer",
+  title: "Parth Patel",
   description: "Portfolio of Parth Patel - Web Designer and Front-end Developer",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {
