@@ -9,7 +9,100 @@
       "order": 0,
       "_id": "1776836748789",
       "createdAt": "2026-04-22T05:45:48.789Z",
-      "updatedAt": "2026-04-22T05:45:48.789Z"
+      "updatedAt": "2026-04-22T08:04:45.010Z",
+      "showOnHome": true
+    },
+    {
+      "title": "Sabka sathi degital service",
+      "description": "It a business growing coumpany",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844011/portfolio/eplgi2ilndj14c3mvqgq.png",
+      "tech": "nextjs , postgres",
+      "link": "sabkasaathidigitalservices.com",
+      "order": 0,
+      "_id": "1776844030911",
+      "createdAt": "2026-04-22T07:47:10.911Z",
+      "updatedAt": "2026-04-22T07:47:10.911Z"
+    },
+    {
+      "title": "Skov Fashion",
+      "description": "This is a clothing brand located in Surat Gujarat",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844223/portfolio/cdvxu6kupybw3pgagdme.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "skovfashion.com",
+      "order": 0,
+      "_id": "1776844243313",
+      "createdAt": "2026-04-22T07:50:43.313Z",
+      "updatedAt": "2026-04-22T08:04:40.743Z",
+      "showOnHome": true
+    },
+    {
+      "title": "Rich Look Beauty Studio",
+      "description": "this is a beauty studio website",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844631/portfolio/t85mcska5zdoya0zdrsv.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "richlook18.in",
+      "order": 0,
+      "_id": "1776844639841",
+      "createdAt": "2026-04-22T07:57:19.841Z",
+      "updatedAt": "2026-04-22T07:57:19.841Z"
+    },
+    {
+      "title": "Emall world",
+      "description": "this is a ecommerce website ",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844748/portfolio/eykb3pprhd4gwnvbzirp.png",
+      "tech": "nextjs , mongodb , vps",
+      "link": "emallworld.com",
+      "order": 0,
+      "_id": "1776844757076",
+      "createdAt": "2026-04-22T07:59:17.076Z",
+      "updatedAt": "2026-04-22T07:59:17.076Z"
+    },
+    {
+      "title": "Vision of akash",
+      "description": "this is a portfoliyo website for a photo grapher",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844802/portfolio/qkrrkz1nuymocyrhe3y6.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "https://vision-of-akash.vercel.app/",
+      "order": "0",
+      "_id": "1776844821485",
+      "createdAt": "2026-04-22T08:00:21.485Z",
+      "updatedAt": "2026-04-22T08:01:56.425Z"
+    },
+    {
+      "title": "Mehandi Artist",
+      "description": "This the portfoliyo website for a mehandi artist",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776845236/portfolio/lbdkytcpmtrkzretud6t.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "najima-mehandi-artist.in",
+      "order": 0,
+      "showOnHome": true,
+      "_id": "1776845252868",
+      "createdAt": "2026-04-22T08:07:32.868Z",
+      "updatedAt": "2026-04-22T08:07:32.868Z"
+    },
+    {
+      "title": "Mitti & Moongfali",
+      "description": "This is a private e-commerce website in which they sell the penuts",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776846937/portfolio/jhz6vicjvficyaifdxpk.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "https://penut-eta.vercel.app/",
+      "order": 0,
+      "showOnHome": true,
+      "_id": "1776846982146",
+      "createdAt": "2026-04-22T08:36:22.146Z",
+      "updatedAt": "2026-04-22T08:36:29.574Z"
+    },
+    {
+      "title": "Tech-ly",
+      "description": "This is a it coumpany wesite",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776847055/portfolio/wv24qgqnw2hwjqtsqyvg.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "tech-ly.in",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1776847075740",
+      "createdAt": "2026-04-22T08:37:55.740Z",
+      "updatedAt": "2026-04-22T08:37:55.740Z"
     }
   ],
   "content": [
@@ -73,7 +166,15 @@
     },
     {
       "section": "reviews",
-      "data": []
+      "data": [
+        {
+          "name": "Ashish Kumar",
+          "feedback": "Portfoliyo website",
+          "productLink": "https://www.sabkasaathidigitalservices.com/",
+          "stars": 5,
+          "video": "https://res.cloudinary.com/dpet9memo/video/upload/v1776843698/portfolio/jks3lobasimjd8oeyjcc.mp4"
+        }
+      ]
     }
   ]
 }

@@ -16,7 +16,9 @@ export default async function Home() {
     reviews: dbContent?.reviews || []
   };
 
-  const projects = dbProjects || [];
+  const projects = (dbProjects || [])
+    .filter(p => p.showOnHome)
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
@@ -75,9 +77,9 @@ export default async function Home() {
             <p className="text-[#ABB2BF] mb-8 leading-relaxed max-w-md">
               {content.hero.subtext}
             </p>
-            <button className="border border-[#C778DD] text-white py-2 px-4 hover:bg-[#C778DD] hover:bg-opacity-20 transition-all duration-300 font-medium text-sm">
+            <a href="#contacts" className="border border-[#C778DD] text-white py-2 px-4 hover:bg-[#C778DD] hover:bg-opacity-20 transition-all duration-300 font-medium text-sm inline-block">
               Contact me !!
-            </button>
+            </a>
           </div>
 
           {/* Hero Image / Graphics */}
@@ -149,7 +151,7 @@ export default async function Home() {
             {projects.map((project) => (
               <div key={project._id} className="border border-[#ABB2BF]">
                 <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                  <img src={project.image || null} alt={project.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
                   {project.tech}
@@ -172,64 +174,6 @@ export default async function Home() {
             ))}
           </div>
         </section>
-
-        {/* Reviews Section */}
-        {content.reviews.length > 0 && (
-          <section id="reviews" className="mb-32">
-            <div className="flex items-center gap-4 mb-12">
-              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>client-reviews</h2>
-              <div className="h-px bg-[#C778DD] w-48"></div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {content.reviews.map((review, idx) => (
-                <div key={idx} className="border border-[#ABB2BF] p-6 hover:border-[#C778DD] transition-all duration-300 group relative flex flex-col">
-                   {/* Star Rating */}
-                   <div className="flex gap-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i < review.stars ? "#E1B12C" : "none"} stroke={i < review.stars ? "#E1B12C" : "#ABB2BF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                      ))}
-                   </div>
-                   
-                   {/* Quote Icon */}
-                   <div className="absolute top-6 right-6 text-[#ABB2BF] opacity-20 group-hover:opacity-40 transition-opacity">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c1 0 1.25.25 1.25 1.25V15c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
-                   </div>
-
-                   {/* Video Review */}
-                   {review.video && (
-                     <div className="mb-4 rounded-xl overflow-hidden border border-[#ABB2BF] border-opacity-20 aspect-video bg-black/40">
-                        <video 
-                          src={review.video} 
-                          controls 
-                          className="w-full h-full object-cover"
-                          poster={review.video.replace(".mp4", ".jpg").replace(".mov", ".jpg")} // Basic attempt at poster
-                        />
-                     </div>
-                   )}
-
-                   <p className="text-[#ABB2BF] italic mb-6 leading-relaxed">
-                     &quot;{review.feedback}&quot;
-                   </p>
-
-                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-[#ABB2BF] border-opacity-20">
-                      <div className="font-semibold text-white">{review.name}</div>
-                      {review.productLink && (
-                        <a 
-                          href={review.productLink.startsWith("http") ? review.productLink : `https://${review.productLink}`} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-[#C778DD] hover:underline"
-                        >
-                          View his product ~~&gt;
-                        </a>
-                      )}
-                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* Skills Section */}
         {content.skills.length > 0 && (
@@ -351,6 +295,64 @@ export default async function Home() {
           <div className="absolute top-20 -left-20 w-32 h-40 border border-[#ABB2BF] opacity-50 hidden md:block"></div>
         </section>
 
+        {/* Reviews Section */}
+        {content.reviews.length > 0 && (
+          <section id="reviews" className="mb-32">
+            <div className="flex items-center gap-4 mb-12">
+              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>client-reviews</h2>
+              <div className="h-px bg-[#C778DD] w-48"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {content.reviews.map((review, idx) => (
+                <div key={idx} className="border border-[#ABB2BF] p-6 hover:border-[#C778DD] transition-all duration-300 group relative flex flex-col">
+                   {/* Star Rating */}
+                   <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i < review.stars ? "#E1B12C" : "none"} stroke={i < review.stars ? "#E1B12C" : "#ABB2BF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      ))}
+                   </div>
+                   
+                   {/* Quote Icon */}
+                   <div className="absolute top-6 right-6 text-[#ABB2BF] opacity-20 group-hover:opacity-40 transition-opacity">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c1 0 1.25.25 1.25 1.25V15c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
+                   </div>
+
+                   {/* Video Review */}
+                   {review.video && (
+                     <div className="mb-4 rounded-xl overflow-hidden border border-[#ABB2BF] border-opacity-20 aspect-video bg-black/40">
+                        <video 
+                          src={review.video} 
+                          controls 
+                          className="w-full h-full object-cover"
+                          poster={review.video.replace(".mp4", ".jpg").replace(".mov", ".jpg")} // Basic attempt at poster
+                        />
+                     </div>
+                   )}
+
+                   <p className="text-[#ABB2BF] italic mb-6 leading-relaxed">
+                     &quot;{review.feedback}&quot;
+                   </p>
+
+                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-[#ABB2BF] border-opacity-20">
+                      <div className="font-semibold text-white">{review.name}</div>
+                      {review.productLink && (
+                        <a 
+                          href={review.productLink.startsWith("http") ? review.productLink : `https://${review.productLink}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-[#C778DD] hover:underline"
+                        >
+                          View his product ~~&gt;
+                        </a>
+                      )}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Contacts Section */}
         <section id="contacts" className="mb-32">
           <div className="flex items-center gap-4 mb-12">
@@ -425,6 +427,7 @@ export default async function Home() {
 
           </div>
         </section>
+
 
         {/* Footer */}
         <Footer />

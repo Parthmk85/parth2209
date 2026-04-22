@@ -29,7 +29,8 @@ export default function ProjectsAdmin() {
     image: "",
     tech: "",
     link: "",
-    order: 0
+    order: 0,
+    showOnHome: false
   });
 
   useEffect(() => {
@@ -57,8 +58,11 @@ export default function ProjectsAdmin() {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: type === "checkbox" ? checked : value 
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -76,7 +80,7 @@ export default function ProjectsAdmin() {
       if (res.ok) {
         setIsModalOpen(false);
         setEditingProject(null);
-        setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0 });
+        setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0, showOnHome: false });
         fetchProjects();
         showNotification(editingProject ? "Project updated!" : "Project created!");
       }
@@ -93,7 +97,8 @@ export default function ProjectsAdmin() {
       image: project.image,
       tech: project.tech,
       link: project.link,
-      order: project.order || 0
+      order: project.order || 0,
+      showOnHome: project.showOnHome || false
     });
     setIsModalOpen(true);
   };
@@ -136,7 +141,7 @@ export default function ProjectsAdmin() {
         <button 
           onClick={() => {
             setEditingProject(null);
-            setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0 });
+            setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0, showOnHome: false });
             setIsModalOpen(true);
           }}
           className="bg-[#C778DD] hover:bg-opacity-90 text-white px-6 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-lg shadow-[#C778DD]/20 font-bold"
@@ -197,7 +202,7 @@ export default function ProjectsAdmin() {
             <div key={project._id} className="bg-[#1A1C20] border border-[#ABB2BF] border-opacity-10 rounded-3xl overflow-hidden group hover:border-[#C778DD] hover:border-opacity-40 transition-all duration-300 flex flex-col shadow-xl">
               <div className="h-56 bg-[#282C33] relative overflow-hidden">
                 <img 
-                  src={project.image} 
+                  src={project.image || null} 
                   alt={project.title} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   onError={(e) => { e.target.src = "https://via.placeholder.com/600x400/282c33/abb2bf?text=Image+Not+Found"; }}
@@ -217,8 +222,15 @@ export default function ProjectsAdmin() {
                     <Trash2 size={18} />
                   </button>
                 </div>
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white border border-white/10 uppercase tracking-widest">
-                  Order: {project.order}
+                <div className="absolute top-4 right-4 flex gap-2">
+                   {project.showOnHome && (
+                     <div className="bg-[#C778DD] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        Home
+                     </div>
+                   )}
+                   <div className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white border border-white/10 uppercase tracking-widest">
+                     Order: {project.order}
+                   </div>
                 </div>
               </div>
               <div className="p-6 flex-1 flex flex-col space-y-4">
@@ -315,6 +327,27 @@ export default function ProjectsAdmin() {
                 </div>
               </div>
 
+              {/* Show on Home Page Toggle */}
+              <div className="bg-[#282C33] p-6 rounded-2xl border border-[#ABB2BF] border-opacity-10 flex items-center justify-between group hover:border-[#C778DD] transition-all">
+                <div className="space-y-1">
+                  <h4 className="text-white font-bold flex items-center gap-2">
+                    Show on Home Page
+                    <span className="bg-[#C778DD]/10 text-[#C778DD] text-[10px] px-2 py-0.5 rounded-full uppercase">Featured</span>
+                  </h4>
+                  <p className="text-[#ABB2BF] text-xs">If enabled, this project will appear in the "featured projects" section on the home page.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    name="showOnHome"
+                    checked={formData.showOnHome} 
+                    onChange={handleInputChange}
+                    className="sr-only peer" 
+                  />
+                  <div className="w-11 h-6 bg-[#1A1C20] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#ABB2BF] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C778DD] peer-checked:after:bg-white"></div>
+                </label>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Thumbnail Image</label>
                 <div className="flex flex-col gap-4">
@@ -359,7 +392,9 @@ export default function ProjectsAdmin() {
                     </label>
                   </div>
                   <div className="w-full h-48 bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl overflow-hidden relative group/preview">
-                    <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; }} />
+                    {formData.image && (
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; }} />
+                    )}
                     {!formData.image && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-[#ABB2BF] opacity-50">
                         <ImageIcon size={40} className="mb-2" />

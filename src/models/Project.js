@@ -7,6 +7,7 @@ const ProjectSchema = new mongoose.Schema({
   tech: { type: String, required: true },
   link: { type: String, required: true },
   order: { type: Number, default: 0 },
+  showOnHome: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export default mongoose.models.Project || mongoose.model("Project", ProjectSchema);

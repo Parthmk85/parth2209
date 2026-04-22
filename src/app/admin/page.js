@@ -11,6 +11,7 @@ import {
   Clock,
   Layout
 } from "lucide-react";
+import Link from "next/link";
 import { 
   AreaChart, 
   Area, 
@@ -66,10 +67,10 @@ export default function AdminDashboard() {
            <button className="bg-[#282C33] border border-[#ABB2BF] border-opacity-20 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-opacity-80 transition-all flex items-center gap-2">
              Download Report
            </button>
-           <button className="bg-[#C778DD] text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-opacity-90 transition-all flex items-center gap-2 shadow-lg shadow-[#C778DD]/20">
+           <Link href="/" target="_blank" className="bg-[#C778DD] text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-opacity-90 transition-all flex items-center gap-2 shadow-lg shadow-[#C778DD]/20">
              Live View
              <ArrowUpRight size={16} />
-           </button>
+           </Link>
         </div>
       </div>
 
