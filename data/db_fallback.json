@@ -1,0 +1,79 @@
+{
+  "projects": [
+    {
+      "title": "glamora clothing brand",
+      "description": "this was my first usa project",
+      "image": "/uploads/1776835757355-Screenshot-2026-04-22-105656.png",
+      "tech": "nextjs , mongodb",
+      "link": "glamorafromusa.vercel.app",
+      "order": 0,
+      "_id": "1776836748789",
+      "createdAt": "2026-04-22T05:45:48.789Z",
+      "updatedAt": "2026-04-22T05:45:48.789Z"
+    }
+  ],
+  "content": [
+    {
+      "section": "hero",
+      "data": {
+        "heading": "Hi, I’m Parth — I design and develop modern web experiences.",
+        "subtext": "Focused on clean UI, responsive design, and smooth user experiences.",
+        "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776838685/portfolio/xrvfrhaixxuhunap8oav.jpg"
+      }
+    },
+    {
+      "section": "about",
+      "data": {
+        "text1": "I’m Parth, a web designer and frontend developer who focuses on creating clean, modern, and user-friendly digital experiences. I believe a good website is not just about design — it should be fast, functional, and meaningful.",
+        "text2": "I started my journey with a passion for design and gradually moved into development, learning how to turn ideas into real, working products. Over time, I’ve worked on multiple projects where I focused on responsive design, performance, and usability.",
+        "text3": "My goal is to build websites that not only look good but also deliver real value. I’m constantly improving my skills and exploring new technologies to create better, faster, and more effective digital solutions.",
+        "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776840485/portfolio/nu4p0qp2gssavrlsqfnc.png"
+      }
+    },
+    {
+      "section": "skills",
+      "data": [
+        {
+          "title": "Programming Languages",
+          "skills": "Python, JavaScript, TypeScript, C++, Java, PHP"
+        },
+        {
+          "title": "Web Development",
+          "skills": "HTML, CSS, Tailwind CSS, React.js, Next.js, Node.js, Express.js"
+        },
+        {
+          "title": "Software Development (Desktop / Offline)",
+          "skills": "Electron.js, .NET, WinForms, WPF, PyQt, Tkinter"
+        },
+        {
+          "title": "Database Management",
+          "skills": "PostgreSQL, MySQL, MongoDB, SQLite, Prisma ORM"
+        },
+        {
+          "title": "ERP & Business Systems",
+          "skills": "Custom ERP Development, Inventory Management System, Billing Software, CRM Systems, Accounting Software"
+        },
+        {
+          "title": "E-commerce Development",
+          "skills": "Custom E-commerce Websites, Payment Gateway Integration, Order Management Systems"
+        },
+        {
+          "title": "Security & Optimization",
+          "skills": "Database Security, API Security, Performance Optimization, SEO Basics"
+        }
+      ]
+    },
+    {
+      "section": "socials",
+      "data": {
+        "whatsapp": "9725942209",
+        "instagram": "techly_the_freelancer",
+        "email": "parthmk85@gmail.com"
+      }
+    },
+    {
+      "section": "reviews",
+      "data": []
+    }
+  ]
+}

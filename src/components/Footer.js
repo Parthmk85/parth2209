@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -18,8 +19,11 @@ export default function Footer() {
         </div>
       </div>
       
-      <div className="text-center text-[#ABB2BF] text-sm">
-         &copy; Copyright 2022. Made by Parth
+      <div className="text-center text-[#ABB2BF] text-sm flex flex-col items-center gap-2">
+         <span>&copy; Copyright 2022. Made by Parth</span>
+         <Link href="/admin" className="hover:text-[#C778DD] transition-colors underline decoration-[#C778DD] decoration-opacity-30">
+           Admin Panel
+         </Link>
       </div>
     </footer>
   );

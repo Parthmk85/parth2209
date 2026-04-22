@@ -1,7 +1,23 @@
+import React from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { getProjects, getContent } from "@/lib/data";
 
-export default function Home() {
+export default async function Home() {
+  const dbProjects = await getProjects();
+  const dbContent = await getContent();
+
+  // Normalize content structure
+  const content = {
+    hero: dbContent?.hero || { heading: "", subtext: "", image: "" },
+    about: dbContent?.about || { text1: "", text2: "", text3: "", image: "/parth-car.jpg" },
+    skills: dbContent?.skills || [],
+    socials: dbContent?.socials || { whatsapp: "9725942209", instagram: "techly_the_freelancer", email: "parthmk85@gmail.com" },
+    reviews: dbContent?.reviews || []
+  };
+
+  const projects = dbProjects || [];
+
   return (
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
 
@@ -32,6 +48,9 @@ export default function Home() {
             <a href="#contacts" className="hover:text-white transition-colors group">
               <span className="text-[#C778DD]">#</span>contacts
             </a>
+            <Link href="/admin" className="hover:text-white transition-colors group">
+              <span className="text-[#C778DD]">#</span>admin
+            </Link>
             <div className="ml-4 flex items-center gap-1 cursor-pointer hover:text-white">
               <span>EN</span>
               <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,10 +65,15 @@ export default function Home() {
           {/* Hero Text */}
           <div className="max-w-xl z-10">
             <h1 className="text-3xl md:text-[32px] font-semibold leading-normal mb-8">
-              Parth is a <span className="text-[#C778DD]">web designer</span> and <span className="text-[#C778DD]">front-end developer</span>
+              {content.hero.heading.split("Parth").map((part, i, arr) => (
+                <React.Fragment key={i}>
+                  {part}
+                  {i < arr.length - 1 && <span className="text-[#C778DD]">Parth</span>}
+                </React.Fragment>
+              ))}
             </h1>
             <p className="text-[#ABB2BF] mb-8 leading-relaxed max-w-md">
-              He crafts responsive websites where technologies meet creativity
+              {content.hero.subtext}
             </p>
             <button className="border border-[#C778DD] text-white py-2 px-4 hover:bg-[#C778DD] hover:bg-opacity-20 transition-all duration-300 font-medium text-sm">
               Contact me !!
@@ -71,15 +95,11 @@ export default function Home() {
 
             {/* Main Image Placeholder (Man in hoodie) */}
             <div className="relative z-10 w-[300px] h-[340px] md:w-[450px] md:h-[386px] grayscale hover:grayscale-0 transition-all duration-500">
-               {/* Since we don't have the exact image, I'll use a placeholder that looks cool/dark or just a colored block if needed, but the user wants 'same'. 
-                   I will try to simulate the look with a placeholder image from standard placeholder services if I can find a 'person' one, or just a dark shape.
-                   Actually, I'll use a generic developer/hoodie guy if I can link one, or a solid placeholder. 
-               */}
                 <img 
-                 src="/parth-portfolio.png" 
-                 alt="Parth" 
-                 className="w-full h-full object-cover object-[50%_25%] filter grayscale transition-all duration-500"
-               />
+                  src={content.hero.image || "https://via.placeholder.com/600x600/282c33/abb2bf?text=Parth"} 
+                  alt="Parth" 
+                  className="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500"
+                />
                
                {/* Dots Pattern */}
                <div className="absolute bottom-16 right-4 md:right-[-20px] z-20">
@@ -126,72 +146,98 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Project 1: ChertNodes */}
-            <div className="border border-[#ABB2BF]">
-              <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden">
-                <img src="glamora.png" alt="ChertNodes" className="w-full h-full object-cover" />
-              </div>
-              <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
-                Next js , Tailwind css , Framer motion
-              </div>
-              <div className="p-4">
-                <h3 className="text-2xl font-medium mb-4 text-white">Glamora</h3>
-                <p className="text-[#ABB2BF] mb-4">E-commerce website</p>
-                <div className="flex gap-4">
-                  <a href="https://final-glamora.vercel.app/" target="_blank" className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm flex items-center gap-2">
-                    Live &lt;~&gt;
-                  </a>
-                  
+            {projects.map((project) => (
+              <div key={project._id} className="border border-[#ABB2BF]">
+                <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden">
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
+                  {project.tech}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-2xl font-medium mb-4 text-white">{project.title}</h3>
+                  <p className="text-[#ABB2BF] mb-4">{project.description}</p>
+                  <div className="flex gap-4">
+                    <a 
+                      href={project.link?.startsWith("http") ? project.link : `https://${project.link}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm flex items-center gap-2"
+                    >
+                      Live &lt;~&gt;
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Project 2: ProtectX */}
-            <div className="border border-[#ABB2BF]">
-              <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden relative">
-                 <img src="medikit.png" alt="ProtectX" className="w-full h-full object-cover" />
-                 {/* Decorative elements to match design - optional */}
-              </div>
-              <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
-Next js , Tailwind css , Framer motion              </div>
-              <div className="p-4">
-                <h3 className="text-2xl font-medium mb-4 text-white">MediKit</h3>
-                <p className="text-[#ABB2BF] mb-4">Medical website</p>
-                <div className="flex gap-4">
-                  <a href="https://parth-medikit.vercel.app/" target="_blank" className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm flex items-center gap-2">
-                    Live &lt;~&gt;
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 3: Kahoot Answers Viewer */}
-            <div className="border border-[#ABB2BF]">
-              <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden">
-                <img src="https://via.placeholder.com/400x200/4c1d95/ffffff?text=Kahoot+Answers" alt="Kahoot Answers" className="w-full h-full object-cover" />
-              </div>
-              <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
-                CSS Express Node.js
-              </div>
-              <div className="p-4">
-                <h3 className="text-2xl font-medium mb-4 text-white">Kahoot Answers Viewer</h3>
-                <p className="text-[#ABB2BF] mb-4">Get answers to your kahoot quiz</p>
-                <div className="flex gap-4">
-                  <a href="#" className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm flex items-center gap-2">
-                    Live &lt;~&gt;
-                  </a>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
+        {/* Reviews Section */}
+        {content.reviews.length > 0 && (
+          <section id="reviews" className="mb-32">
+            <div className="flex items-center gap-4 mb-12">
+              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>client-reviews</h2>
+              <div className="h-px bg-[#C778DD] w-48"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {content.reviews.map((review, idx) => (
+                <div key={idx} className="border border-[#ABB2BF] p-6 hover:border-[#C778DD] transition-all duration-300 group relative flex flex-col">
+                   {/* Star Rating */}
+                   <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill={i < review.stars ? "#E1B12C" : "none"} stroke={i < review.stars ? "#E1B12C" : "#ABB2BF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                      ))}
+                   </div>
+                   
+                   {/* Quote Icon */}
+                   <div className="absolute top-6 right-6 text-[#ABB2BF] opacity-20 group-hover:opacity-40 transition-opacity">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c1 0 1.25.25 1.25 1.25V15c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
+                   </div>
+
+                   {/* Video Review */}
+                   {review.video && (
+                     <div className="mb-4 rounded-xl overflow-hidden border border-[#ABB2BF] border-opacity-20 aspect-video bg-black/40">
+                        <video 
+                          src={review.video} 
+                          controls 
+                          className="w-full h-full object-cover"
+                          poster={review.video.replace(".mp4", ".jpg").replace(".mov", ".jpg")} // Basic attempt at poster
+                        />
+                     </div>
+                   )}
+
+                   <p className="text-[#ABB2BF] italic mb-6 leading-relaxed">
+                     &quot;{review.feedback}&quot;
+                   </p>
+
+                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-[#ABB2BF] border-opacity-20">
+                      <div className="font-semibold text-white">{review.name}</div>
+                      {review.productLink && (
+                        <a 
+                          href={review.productLink.startsWith("http") ? review.productLink : `https://${review.productLink}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-[#C778DD] hover:underline"
+                        >
+                          View his product ~~&gt;
+                        </a>
+                      )}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Skills Section */}
-        <section id="skills" className="mb-32">
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>skills</h2>
-            <div className="h-px bg-[#C778DD] w-64"></div>
-          </div>
+        {content.skills.length > 0 && (
+          <section id="skills" className="mb-32">
+            <div className="flex items-center gap-4 mb-12">
+              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>skills</h2>
+              <div className="h-px bg-[#C778DD] w-64"></div>
+            </div>
 
           <div className="flex flex-col md:flex-row gap-16">
             {/* Left Side - Decorations */}
@@ -222,42 +268,23 @@ Next js , Tailwind css , Framer motion              </div>
             </div>
 
             {/* Right Side - Skills Grid */}
-            <div className="w-full md:w-2/3 flex flex-wrap gap-4 justify-end">
-               
-               {/* Column 1 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Languages</h4>
-                     <p className="p-2 text-[#ABB2BF]">Python<br/> JavaScript</p>
-                  </div>
-               </div>
-
-               {/* Column 2 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Databases</h4>
-                     <p className="p-2 text-[#ABB2BF]">SQLite <br/>Mongo</p>
-                  </div>
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Other</h4>
-                     <p className="p-2 text-[#ABB2BF]">HTML CSS EJS <br/></p>
-                  </div>
-               </div>
-
-               {/* Column 3 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Tools</h4>
-                     <p className="p-2 text-[#ABB2BF]">VSCode Neovim Linux<br/>Figma XFCE Arch<br/>Git Font Awesome</p>
-                  </div>
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Frameworks</h4>
-                     <p className="p-2 text-[#ABB2BF]">React Vue<br/>Next Js<br/></p>
-                  </div>
-               </div>
+            <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-min">
+               {content.skills.map((category, idx) => (
+                 <div key={idx} className="border border-[#ABB2BF] h-fit hover:border-[#C778DD] transition-all duration-300 group hover:shadow-[0_0_20px_rgba(199,120,221,0.1)]">
+                    <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white group-hover:text-[#C778DD] transition-colors">{category.title}</h4>
+                    <div className="p-2 text-[#ABB2BF] flex flex-wrap gap-2">
+                      {category.skills.split(",").map((s, i) => (
+                        <span key={i} className="hover:text-white transition-colors cursor-default leading-relaxed">
+                          {s.trim()}
+                        </span>
+                      ))}
+                    </div>
+                 </div>
+               ))}
             </div>
           </div>
         </section>
+        )}
 
         {/* About Me Section */}
         <section id="about-me" className="mb-32 relative">
@@ -271,13 +298,13 @@ Next js , Tailwind css , Framer motion              </div>
             {/* Left Content */}
             <div className="md:w-1/2 text-[#ABB2BF] leading-relaxed">
               <p className="mb-8">
-                Hello, I&apos;m Parth!
+                {content.about.text1}
               </p>
               <p className="mb-8">
-                I&apos;m a self-taught front-end developer based in Bhavnagar. I can develop responsive websites from scratch and raise them into modern user-friendly web experiences.
+                {content.about.text2}
               </p>
               <p className="mb-8">
-                Transforming my creativity and knowledge into a websites has been my passion for over a year. I have been helping various clients to establish their presence online. I always strive to learn about the newest technologies and frameworks.
+                {content.about.text3}
               </p>
               <Link href="/about-me" className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm inline-flex items-center gap-2">
                 Read more -&gt;
@@ -290,9 +317,9 @@ Next js , Tailwind css , Framer motion              </div>
                   {/* Image */}
                   <div className="w-[340px] h-[500px] border-b border-[#C778DD] relative z-10">
                       <img 
-                               src="/parth-portfolio.png" 
+                        src={content.about.image || "https://via.placeholder.com/400x500/282c33/abb2bf?text=Parth"} 
                         alt="Parth" 
-                        className="w-full h-full object-cover grayscale"
+                        className="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500"
                       />
                   </div>
 
@@ -343,21 +370,49 @@ Next js , Tailwind css , Framer motion              </div>
              <div className="md:w-1/2 flex justify-end">
                 <div className="border border-[#ABB2BF] p-4 min-w-[200px]">
                    <h4 className="font-semibold text-white mb-4">Message me here</h4>
-                   <div className="flex flex-col gap-2 text-[#ABB2BF]">
-                      <a href="tel:9725942209" className="flex items-center gap-2 hover:text-[#C778DD] transition-colors cursor-pointer">
-                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 16.92V19.92C22.0011 20.1986 21.9442 20.4742 21.8325 20.7308C21.7209 20.9873 21.5567 21.2197 21.3496 21.4144C21.1424 21.6091 20.8966 21.7623 20.6264 21.8651C20.3562 21.9678 20.0671 22.0182 19.776 22.013C16.8271 21.905 13.9845 21.0569 11.444 20.528C9.04306 20.024 6.81268 18.9951 4.90801 17.502C3.1518 16.115 1.70479 14.3932 0.69001 12.428C0.16101 9.88795 0.76001 7.04295 1.78001 4.22395C1.86561 3.59374 2.11463 3.00318 2.50275 2.5085C2.89087 2.01383 3.40498 1.63155 3.99601 1.39795C4.59401 1.15995 5.24201 1.09995 5.86601 1.22395C6.49001 1.34795 7.06001 1.65195 7.50801 2.09995L8.78001 3.37195C9.40578 3.99818 9.75713 4.84738 9.75713 5.73295C9.75713 6.61853 9.40578 7.46772 8.78001 8.09395L8.03801 8.83595C8.42316 10.3235 9.14187 11.7107 10.1343 12.8795C11.1267 14.0483 12.3639 14.9658 13.744 15.556L14.486 14.814C15.1123 14.1882 15.9614 13.8368 16.847 13.8368C17.7326 13.8368 18.5818 14.1882 19.208 14.814L20.48 16.086C20.8407 16.4468 21.1068 16.8893 21.2584 17.379C21.4099 17.8687 21.4429 18.3924 21.3546 18.909C21.2663 19.4255 21.0589 19.921 20.7482 20.3559C20.4375 20.7907 20.0315 21.1534 19.562 21.416L18.942 21.808C18.942 21.808 18.942 21.808 18.942 21.808Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M22 16.92L19.208 14.128C18.5818 13.5022 17.7326 13.1508 16.847 13.1508C15.9614 13.1508 15.1123 13.5022 14.486 14.128L13.744 14.87C12.3639 14.2798 11.1267 13.3623 10.1343 12.1935C9.14187 11.0247 8.42316 9.63754 8.03801 8.14995L8.78001 7.40795C9.40578 6.78172 9.75713 5.93253 9.75713 5.04695C9.75713 4.16138 9.40578 3.31218 8.78001 2.68595L7.50801 1.41395C7.06001 0.965953 6.49001 0.661953 5.86601 0.537953C5.24201 0.413953 4.59401 0.473953 3.99601 0.711953C3.40498 0.945553 2.89087 1.32783 2.50275 1.8225C2.11463 2.31718 1.86561 2.90774 1.78001 3.53795C0.76001 6.35695 0.16101 9.20195 0.69001 11.742C1.70479 13.7072 3.1518 15.429 4.90801 16.816C6.81268 18.3091 9.04306 19.338 11.444 19.842C13.9845 20.3709 16.8271 21.219 19.776 21.327C20.0671 21.3323 20.3562 21.2818 20.6264 21.1791C20.8966 21.0763 21.1424 20.9231 21.3496 20.7284C21.5567 20.5337 21.7209 20.3013 21.8325 20.0448C21.9442 19.7882 22.0011 19.5126 22 19.234V16.92Z" fill="currentColor"/>
-                         </svg>
-                         <span>9725942209</span>
-                      </a>
-                      <a href="mailto:parthmk85@gmail.com" className="flex items-center gap-2 hover:text-[#C778DD] transition-colors cursor-pointer">
-                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                         </svg>
-                         <span>parthmk85@gmail.com</span>
-                      </a>
+                   <div className="flex flex-col gap-3">
+                      {/* WhatsApp */}
+                      {content.socials.whatsapp && (
+                        <a 
+                          href={`https://wa.me/${content.socials.whatsapp}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-[#ABB2BF] hover:text-[#98C379] transition-all group"
+                        >
+                           <div className="p-1.5 border border-[#ABB2BF] group-hover:border-[#98C379] transition-colors">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                           </div>
+                           <span className="font-medium">WhatsApp</span>
+                        </a>
+                      )}
+
+                      {/* Instagram */}
+                      {content.socials.instagram && (
+                        <a 
+                          href={`https://instagram.com/${content.socials.instagram}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-[#ABB2BF] hover:text-[#C778DD] transition-all group"
+                        >
+                           <div className="p-1.5 border border-[#ABB2BF] group-hover:border-[#C778DD] transition-colors">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                           </div>
+                           <span className="font-medium">Instagram</span>
+                        </a>
+                      )}
+
+                      {/* Email */}
+                      {content.socials.email && (
+                        <a 
+                          href={`mailto:${content.socials.email}`}
+                          className="flex items-center gap-2 text-[#ABB2BF] hover:text-white transition-all group"
+                        >
+                           <div className="p-1.5 border border-[#ABB2BF] group-hover:border-white transition-colors">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                           </div>
+                           <span className="font-medium text-xs truncate max-w-[120px]">{content.socials.email}</span>
+                        </a>
+                      )}
                    </div>
                 </div>
              </div>
