@@ -1,185 +1,120 @@
 import Link from "next/link";
-import Image from "next/image";
+import { headers } from "next/headers";
+import { brandTitle } from "@/lib/site";
 import Footer from "@/components/Footer";
+import SiteHeader from "@/components/SiteHeader";
+import { getContent } from "@/lib/data";
+import { SERVICES } from "@/lib/services";
+import { ServicesSection, SkillsSection, AboutSection } from "@/components/HomeSections";
 
-export default function AboutMe() {
-  return (
-    <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden font-mono">
+// Tech stack comes from the CMS skills section.
+export const dynamic = "force-dynamic";
 
+export async function generateMetadata() {
+  return { ...METADATA, title: await brandTitle(METADATA.title) };
+}
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 md:px-24 py-8 max-w-7xl">
-        
-        {/* Navbar */}
-        <header className="flex justify-between items-center mb-16">
-          <div className="flex items-center gap-2 font-bold text-lg">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2H4V14H12V10H8V8H12V2ZM4 0C2.89543 0 2 0.89543 2 2V14C2 15.1046 2.89543 16 4 16H12C13.1046 16 14 15.1046 14 14V2C14 0.89543 13.1046 0 12 0H4Z" />
-              <path d="M6 4H10V6H6V4Z" fill="#282C33"/>
-            </svg>
-            <span>Parth Patel</span>
+const METADATA = {
+  title: "About EZcods IT Solutions | Software Development Company in India",
+  description: "EZcods IT Solutions is an Indian software development company founded by Parth Badreshiya, building websites, e-commerce stores, mobile apps and custom CRM/ERP software.",
+};
+
+const ABOUT = [
+  "EZcods IT Solutions is a software development company in India, founded by Parth Badreshiya. We build business websites, e-commerce stores, Android and iOS apps, and custom CRM and ERP software.",
+  "We start from how a business already works and build around it. That means fast, mobile-first websites, online stores you can run from an admin panel, and software that fits your team instead of forcing it to change.",
+  "Every project starts with a free discovery call, where we understand the requirement, suggest the right approach and share an indicative timeline and budget.",
+];
+
+export default async function About() {
+  const data = await getContent();
+  const skills = data?.skills || [];
+
+  // parthdev.in: same sections, markup and theme as its homepage
+  // (ezcods.com keeps the page below unchanged).
+  const host = (await headers()).get("host") ?? "";
+  if (/^(www\.)?parthdev\.in(:\d+)?$/.test(host)) {
+    return (
+      <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
+        <div className="pd-about container mx-auto px-6 md:px-24 py-8 max-w-7xl">
+          <SiteHeader brand={false} />
+          <AboutSection paragraphs={ABOUT} image={data?.about?.image} as="h1" readMore={false} />
+          <ServicesSection title="what-we-build" links={false} />
+          <SkillsSection skills={skills} parthdev title="tech-stack" />
+          <div className="mb-8 text-[#ABB2BF]">
+            <p className="mb-4">
+              See what we&apos;ve built on our <Link href="/work" className="text-[#C778DD] hover:underline">work page</Link>, or tell us about your project.
+            </p>
+            <Link href="/connect" className="bg-[#C778DD] text-white py-2 px-4 hover:opacity-90 transition-opacity font-medium text-sm inline-block">
+              Book a free discovery call
+            </Link>
           </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-[#ABB2BF] font-medium">
-            <Link href="/" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>home
-            </Link>
-            <Link href="/projects" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>works
-            </Link>
-            <Link href="/about-me" className="hover:text-white transition-colors group text-white font-semibold">
-              <span className="text-[#C778DD]">#</span>about-me
-            </Link>
-            <Link href="/#contacts" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>contacts
-            </Link>
-            <div className="ml-4 flex items-center gap-1 cursor-pointer hover:text-white">
-              <span>EN</span>
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-            </div>
-          </nav>
-        </header>
-
-        {/* Page Title */}
-        <div className="mb-12">
-             <h1 className="text-3xl font-semibold mb-2"><span className="text-[#C778DD]">/</span>about-me</h1>
-             <p className="text-[#ABB2BF]">Who am I?</p>
+          <Footer />
         </div>
-
-        {/* About Me Content */}
-        <section className="flex flex-col md:flex-row justify-between gap-12 mb-32 relative">
-             {/* Left Content */}
-             <div className="md:w-1/2 text-[#ABB2BF] leading-relaxed">
-               <p className="mb-8">
-                 Hello, I&apos;m Parth!
-               </p>
-               <p className="mb-8">
-                 I&apos;m a self-taught front-end developer based in Kyiv, Ukraine. I can develop responsive websites from scratch and raise them into modern user-friendly web experiences.
-               </p>
-               <p className="mb-8">
-                 Transforming my creativity and knowledge into a websites has been my passion for over a year. I have been helping various clients to establish their presence online. I always strive to learn about the newest technologies and frameworks.
-               </p>
-             </div>
-
-             {/* Right Image */}
-             <div className="md:w-1/2 relative flex justify-center">
-                <div className="relative">
-                   <div className="w-[300px] h-[400px] relative z-10">
-                       <img 
-                         src="/parth-portfolio.png" 
-                         alt="Parth" 
-                         className="w-full h-full object-cover grayscale"
-                       />
-                   </div>
-                   {/* Dots decoration */}
-                   <div className="absolute top-12 -left-4 grid grid-cols-5 gap-4 z-20">
-                     {[...Array(25)].map((_, i) => (
-                         <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                     ))}
-                   </div>
-                   {/* Middle right dots */}
-                   <div className="absolute top-1/2 -right-12 grid grid-cols-5 gap-4 z-20">
-                     {[...Array(20)].map((_, i) => (
-                         <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                     ))}
-                   </div>
-                </div>
-             </div>
-        </section>
-
-        {/* Skills Section */}
-        <section id="skills" className="mb-24">
-          <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>skills</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-               {/* Column 1 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Languages</h4>
-                     <p className="p-2 text-[#ABB2BF]">TypeScript Lua<br/>Python JavaScript</p>
-                  </div>
-               </div>
-
-               {/* Column 2 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Other</h4>
-                     <p className="p-2 text-[#ABB2BF]">HTML CSS EJS SCSS<br/>REST Jinja</p>
-                  </div>
-               </div>
-
-               {/* Column 3 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Tools</h4>
-                     <p className="p-2 text-[#ABB2BF]">VSCode Neovim Linux<br/>Figma XFCE Arch<br/>Git Font Awesome</p>
-                  </div>
-               </div>
-               
-               {/* Column 4 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Databases</h4>
-                     <p className="p-2 text-[#ABB2BF]">SQLite PostgreSQL<br/>Mongo</p>
-                  </div>
-               </div>
-
-               {/* Column 5 */}
-               <div className="flex flex-col gap-4">
-                  <div className="border border-[#ABB2BF] w-44">
-                     <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white">Frameworks</h4>
-                     <p className="p-2 text-[#ABB2BF]">React Vue<br/>Disnake Discord.js<br/>Flask Express.js</p>
-                  </div>
-               </div>
-          </div>
-        </section>
-
-        {/* My Fun Facts Section */}
-        <section id="my-fun-facts" className="mb-24 relative">
-          <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>my-fun-facts</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4 max-w-2xl relative z-10">
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I like winter more than summer</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I often bike with my friends</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I like pizza and pasta</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I was in Egypt, Poland and Turkey</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">My favorite movie is The Green Mile</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I am still in school</div>
-              <div className="border border-[#ABB2BF] p-2 text-[#ABB2BF]">I don&apos;t have any siblings</div>
-          </div>
-
-          {/* Decorations */}
-           <div className="absolute top-0 right-0 hidden md:block">
-               {/* Dots */}
-               <div className="grid grid-cols-5 gap-4 mb-12">
-                   {[...Array(15)].map((_, i) => (
-                       <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                   ))}
-               </div>
-               {/* Squares */}
-               <div className="relative w-32 h-32">
-                   <div className="absolute top-0 right-8 w-24 h-24 border border-[#C778DD]"></div>
-                   <div className="absolute top-8 right-0 w-24 h-24 border border-[#C778DD]"></div>
-               </div>
-           </div>
-           
-           <div className="absolute bottom-0 -left-8 md:hidden">
-              <div className="w-24 h-24 border border-[#C778DD]"></div>
-           </div>
-        </section>
-
-        {/* Footer - Shared */}
-        <Footer />
-
       </div>
-      
-       <div className="fixed top-0 left-8 h-[200px] w-px bg-transparent md:hidden"></div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen text-white">
+      <div className="container mx-auto px-6 md:px-24 py-8 max-w-5xl">
+        <SiteHeader />
+
+        <section className="mb-20">
+          <h1 className="text-3xl md:text-4xl font-semibold mb-6"><span className="text-[#C778DD]">/</span>about-us</h1>
+          <div className="text-[#ABB2BF] leading-relaxed max-w-3xl space-y-5">
+            <p>
+              EZcods IT Solutions is a software development company in India, founded by Parth Badreshiya. We build
+              business websites, e-commerce stores, Android and iOS apps, and custom CRM and ERP software.
+            </p>
+            <p>
+              We start from how a business already works and build around it. That means fast, mobile-first
+              websites, online stores you can run from an admin panel, and software that fits your team instead of
+              forcing it to change.
+            </p>
+            <p>
+              Every project starts with a free discovery call, where we understand the requirement, suggest the
+              right approach and share an indicative timeline and budget.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-20">
+          <h2 className="text-2xl font-medium mb-6"><span className="text-[#C778DD]">#</span>what-we-build</h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {SERVICES.map((s) => (
+              <Link key={s.slug} href={`/services/${s.slug}`} className="border border-[#ABB2BF] p-4 hover:border-[#C778DD]">
+                <h3 className="font-semibold mb-1">{s.name}</h3>
+                <p className="text-[#ABB2BF] text-sm">{s.summary}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {skills.length > 0 && (
+          <section className="mb-20">
+            <h2 className="text-2xl font-medium mb-6"><span className="text-[#C778DD]">#</span>tech-stack</h2>
+            <dl className="grid sm:grid-cols-2 gap-4">
+              {skills.map((c) => (
+                <div key={c.title} className="border border-[#ABB2BF]/40 p-3">
+                  <dt className="font-semibold mb-1">{c.title}</dt>
+                  <dd className="text-[#ABB2BF] text-sm">{c.skills}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        <section className="mb-8">
+          <p className="text-[#ABB2BF] mb-4">
+            See what we&apos;ve built on our <Link href="/work" className="text-[#C778DD] hover:underline">work page</Link>, or tell us about your project.
+          </p>
+          <Link href="/connect" className="bg-[#C778DD] text-white py-2 px-4 hover:opacity-90 font-medium text-sm inline-block">
+            Book a free discovery call
+          </Link>
+        </section>
+
+        <Footer />
+      </div>
     </div>
   );
 }

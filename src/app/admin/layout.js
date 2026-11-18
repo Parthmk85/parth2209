@@ -78,7 +78,7 @@ export default function AdminLayout({ children }) {
                  P
                </div>
                <div>
-                  <p className="text-xs font-black text-white">Parth Patel</p>
+                  <p className="text-xs font-black text-white">Parth Badreshiya</p>
                   <p className="text-[10px] text-[#ABB2BF] font-medium">Owner / Dev</p>
                </div>
             </div>

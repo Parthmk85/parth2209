@@ -15,12 +15,24 @@ import {
   X,
   FolderKanban
 } from "lucide-react";
+import VideoTrimmer from "@/components/VideoTrimmer";
+
+/** A project added with only a URL has no title; its domain is the label. */
+function hostOf(link) {
+  if (!link) return "Untitled";
+  try {
+    return new URL(link.startsWith("http") ? link : `https://${link}`).hostname.replace(/^www\./, "");
+  } catch {
+    return link;
+  }
+}
 
 export default function ProjectsAdmin() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [notification, setNotification] = useState(null);
   const [formData, setFormData] = useState({
@@ -29,6 +41,9 @@ export default function ProjectsAdmin() {
     image: "",
     tech: "",
     link: "",
+    category: "informational",
+    media: "",
+    mediaType: "",
     order: 0,
     showOnHome: false
   });
@@ -80,7 +95,7 @@ export default function ProjectsAdmin() {
       if (res.ok) {
         setIsModalOpen(false);
         setEditingProject(null);
-        setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0, showOnHome: false });
+        setFormData({ title: "", description: "", image: "", tech: "", link: "", category: "informational", media: "", mediaType: "", order: 0, showOnHome: false });
         fetchProjects();
         showNotification(editingProject ? "Project updated!" : "Project created!");
       }
@@ -89,14 +104,42 @@ export default function ProjectsAdmin() {
     }
   };
 
+  const handleMediaUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        showNotification(data.error || "Upload failed", "error");
+        return;
+      }
+      // mediaType comes from the server, which decided it from the real MIME
+      // type rather than the file name.
+      setFormData((f) => ({ ...f, media: data.url, mediaType: data.type }));
+      showNotification("Uploaded");
+    } catch {
+      showNotification("Upload failed", "error");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
+
   const handleEdit = (project) => {
     setEditingProject(project);
     setFormData({
-      title: project.title,
-      description: project.description,
-      image: project.image,
-      tech: project.tech,
+      title: project.title || "",
+      description: project.description || "",
+      image: project.image || "",
+      tech: project.tech || "",
       link: project.link,
+      category: project.category || "informational",
+      media: project.media || "",
+      mediaType: project.mediaType || "",
       order: project.order || 0,
       showOnHome: project.showOnHome || false
     });
@@ -117,8 +160,9 @@ export default function ProjectsAdmin() {
   };
 
   const filteredProjects = projects.filter(p => 
-    p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.tech.toLowerCase().includes(searchQuery.toLowerCase())
+    (p.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (p.tech || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (p.link || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -141,7 +185,7 @@ export default function ProjectsAdmin() {
         <button 
           onClick={() => {
             setEditingProject(null);
-            setFormData({ title: "", description: "", image: "", tech: "", link: "", order: 0, showOnHome: false });
+            setFormData({ title: "", description: "", image: "", tech: "", link: "", category: "informational", media: "", mediaType: "", order: 0, showOnHome: false });
             setIsModalOpen(true);
           }}
           className="bg-[#C778DD] hover:bg-opacity-90 text-white px-6 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-lg shadow-[#C778DD]/20 font-bold"
@@ -202,8 +246,8 @@ export default function ProjectsAdmin() {
             <div key={project._id} className="bg-[#1A1C20] border border-[#ABB2BF] border-opacity-10 rounded-3xl overflow-hidden group hover:border-[#C778DD] hover:border-opacity-40 transition-all duration-300 flex flex-col shadow-xl">
               <div className="h-56 bg-[#282C33] relative overflow-hidden">
                 <img 
-                  src={project.image || null} 
-                  alt={project.title} 
+                  src={project.media || project.image || null} 
+                  alt={project.title || project.link} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   onError={(e) => { e.target.src = "https://via.placeholder.com/600x400/282c33/abb2bf?text=Image+Not+Found"; }}
                 />
@@ -235,12 +279,12 @@ export default function ProjectsAdmin() {
               </div>
               <div className="p-6 flex-1 flex flex-col space-y-4">
                 <div>
-                  <h3 className="font-bold text-xl text-white group-hover:text-[#C778DD] transition-colors line-clamp-1">{project.title}</h3>
-                  <p className="text-[#ABB2BF] text-sm line-clamp-2 mt-2 leading-relaxed">{project.description}</p>
+                  <h3 className="font-bold text-xl text-white group-hover:text-[#C778DD] transition-colors line-clamp-1">{project.title || hostOf(project.link)}</h3>
+                  <p className="text-[#ABB2BF] text-sm line-clamp-2 mt-2 leading-relaxed">{project.description || project.link}</p>
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                  {project.tech.split(",").map(t => (
+                  {(project.tech || "").split(",").filter(Boolean).map(t => (
                     <span key={t} className="text-[10px] font-bold bg-[#C778DD]/10 text-[#C778DD] px-2.5 py-1 rounded-lg border border-[#C778DD]/20">
                       {t.trim()}
                     </span>
@@ -288,130 +332,66 @@ export default function ProjectsAdmin() {
             </div>
 
             <form onSubmit={handleSubmit} className="p-8 space-y-8 max-h-[75vh] overflow-y-auto custom-scrollbar">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Project Title</label>
-                    <input 
-                      name="title" value={formData.title} onChange={handleInputChange} required
-                      className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] focus:ring-1 focus:ring-[#C778DD]/20 outline-none transition-all placeholder:text-[#ABB2BF]/30"
-                      placeholder="e.g. Minimalist Dashboard"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Tech Stack (CSV)</label>
-                    <input 
-                      name="tech" value={formData.tech} onChange={handleInputChange} required
-                      className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] focus:ring-1 focus:ring-[#C778DD]/20 outline-none transition-all placeholder:text-[#ABB2BF]/30"
-                      placeholder="Next.js, Tailwind, Prisma"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Display Order</label>
-                    <input 
-                      name="order" type="number" value={formData.order} onChange={handleInputChange}
-                      className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Live URL</label>
-                    <input 
-                      name="link" value={formData.link} onChange={handleInputChange} required
-                      className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all placeholder:text-[#ABB2BF]/30"
-                      placeholder="https://your-project.com"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Show on Home Page Toggle */}
-              <div className="bg-[#282C33] p-6 rounded-2xl border border-[#ABB2BF] border-opacity-10 flex items-center justify-between group hover:border-[#C778DD] transition-all">
-                <div className="space-y-1">
-                  <h4 className="text-white font-bold flex items-center gap-2">
-                    Show on Home Page
-                    <span className="bg-[#C778DD]/10 text-[#C778DD] text-[10px] px-2 py-0.5 rounded-full uppercase">Featured</span>
-                  </h4>
-                  <p className="text-[#ABB2BF] text-xs">If enabled, this project will appear in the "featured projects" section on the home page.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    name="showOnHome"
-                    checked={formData.showOnHome} 
-                    onChange={handleInputChange}
-                    className="sr-only peer" 
-                  />
-                  <div className="w-11 h-6 bg-[#1A1C20] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#ABB2BF] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C778DD] peer-checked:after:bg-white"></div>
-                </label>
-              </div>
-
+              {/* Deliberately two fields.
+                  Everything else the card needs is derived: the preview is a
+                  live frame of the URL itself and the title falls back to the
+                  hostname, so a project is "paste a link, pick a type". */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Thumbnail Image</label>
-                <div className="flex flex-col gap-4">
-                  <div className="flex gap-4">
-                    <div className="flex-1 relative">
-                      <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-[#ABB2BF] opacity-50" size={18} />
-                      <input 
-                        name="image" value={formData.image} onChange={handleInputChange} required
-                        className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl py-4 pl-12 pr-4 text-white focus:border-[#C778DD] outline-none transition-all placeholder:text-[#ABB2BF]/30"
-                        placeholder="Image URL or upload..."
-                      />
-                    </div>
-                    <label className="bg-[#282C33] border border-[#ABB2BF] border-opacity-10 hover:border-[#C778DD] text-white px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center gap-2 group">
-                      <Plus size={18} className="group-hover:rotate-90 transition-transform" />
-                      <span className="text-sm font-bold">Upload</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        className="hidden" 
-                        onChange={async (e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const formDataUpload = new FormData();
-                            formDataUpload.append("file", file);
-                            showNotification("Uploading...", "info");
-                            try {
-                              const res = await fetch("/api/upload", {
-                                method: "POST",
-                                body: formDataUpload
-                              });
-                              const data = await res.json();
-                              if (data.url) {
-                                setFormData(prev => ({ ...prev, image: data.url }));
-                                showNotification("Upload complete!");
-                              }
-                            } catch (err) {
-                              showNotification("Upload failed", "error");
-                            }
-                          }
-                        }}
-                      />
-                    </label>
-                  </div>
-                  <div className="w-full h-48 bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl overflow-hidden relative group/preview">
-                    {formData.image && (
-                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display='none'; }} />
-                    )}
-                    {!formData.image && (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-[#ABB2BF] opacity-50">
-                        <ImageIcon size={40} className="mb-2" />
-                        <span className="text-xs uppercase tracking-widest font-bold">No Image Selected</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Detailed Description</label>
-                <textarea 
-                  name="description" value={formData.description} onChange={handleInputChange} required
-                  className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all h-32 resize-none placeholder:text-[#ABB2BF]/30 leading-relaxed"
-                  placeholder="Tell the story of this project, the challenges you solved, and the results achieved..."
+                <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Website URL</label>
+                <input
+                  name="link" value={formData.link} onChange={handleInputChange} required autoFocus
+                  className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all placeholder:text-[#ABB2BF]/30"
+                  placeholder="https://your-project.com"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">Type</label>
+                <select
+                  name="category" value={formData.category} onChange={handleInputChange} required
+                  className="w-full bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all"
+                >
+                  <option value="informational">Informational website</option>
+                  <option value="animated">Animated website</option>
+                  <option value="ecommerce">Ecommerce website</option>
+                  <option value="crm">CRM / ERP (custom)</option>
+                </select>
+                <p className="text-xs text-[#ABB2BF]/50 ml-1">Decides which step it appears under on /work.</p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-[#ABB2BF] ml-1">
+                  Preview media <span className="text-[#ABB2BF]/50 normal-case font-normal tracking-normal">(optional)</span>
+                </label>
+                <div className="flex gap-3">
+                  <input
+                    name="media" value={formData.media} onChange={handleInputChange}
+                    className="flex-1 bg-[#282C33] border border-[#ABB2BF] border-opacity-10 rounded-2xl p-4 text-white focus:border-[#C778DD] outline-none transition-all placeholder:text-[#ABB2BF]/30"
+                    placeholder="Upload a video or image, or paste a URL"
+                  />
+                  <label className="cursor-pointer bg-white/5 border border-[#ABB2BF] border-opacity-10 hover:bg-white/10 rounded-2xl px-5 flex items-center gap-2 text-sm font-bold whitespace-nowrap">
+                    {uploading ? "Uploading…" : "+ Upload"}
+                    <input type="file" accept="image/*,video/*" className="hidden" onChange={handleMediaUpload} disabled={uploading} />
+                  </label>
+                </div>
+                <p className="text-xs text-[#ABB2BF]/50 ml-1">
+                  A video plays in the card with a play button. Leave empty and the card previews the live site itself.
+                </p>
+                {formData.media &&
+                  (formData.mediaType === "video" ? (
+                    <VideoTrimmer
+                      src={formData.media}
+                      onTrimmed={(url, seconds) => {
+                        setFormData((f) => ({ ...f, media: url }));
+                        showNotification(`Trimmed to ${seconds}s`);
+                      }}
+                    />
+                  ) : (
+                    <div className="mt-3 rounded-2xl overflow-hidden border border-[#ABB2BF] border-opacity-10 bg-black/30">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={formData.media} alt="preview" className="w-full max-h-56 object-contain" />
+                    </div>
+                  ))}
               </div>
 
               <div className="pt-6 flex flex-col md:flex-row gap-4">

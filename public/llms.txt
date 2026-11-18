@@ -1,0 +1,31 @@
+# EZcods IT Solutions
+
+> EZcods IT Solutions is an Indian software development company. We build
+> business websites, e-commerce stores, mobile apps and custom CRM / ERP
+> software for businesses of every size.
+
+## Services
+
+- Business websites: informational and animated/premium sites, built with React and Next.js.
+- E-commerce development: custom online stores, payment gateway integration, order management.
+- Mobile apps: Android and iOS apps with Flutter and React Native.
+- Custom CRM / ERP: lead management, inventory, billing and accounting software built around how a business works.
+- Desktop / offline software: Electron, .NET (WinForms, WPF) and Python desktop apps.
+
+## Key pages
+
+- [Website development](https://ezcods.com/services/website-development)
+- [E-commerce development](https://ezcods.com/services/ecommerce-development)
+- [Mobile app development](https://ezcods.com/services/mobile-app-development)
+- [Custom CRM & ERP development](https://ezcods.com/services/crm-erp-development)
+
+- [Home](https://ezcods.com/): Services, process, FAQ and tech stack.
+- [Our work](https://ezcods.com/work): Live client projects, from simple sites to custom CRMs.
+- [About](https://ezcods.com/about-me): About EZcods and its founder, Parth Badreshiya.
+- [Book a call](https://ezcods.com/connect): Book a free discovery call.
+- [Start a project](https://inquiry.ezcods.com/): Tell us what you need and book a call.
+
+## Contact
+
+- Email: parthmk85@gmail.com
+- WhatsApp: https://wa.me/9725942209

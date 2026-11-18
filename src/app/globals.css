@@ -31,3 +31,31 @@ html {
 .text-gray {
   color: var(--gray);
 }
+
+/* Trim handles (admin VideoTrimmer). The track itself is drawn by the
+   component; these inputs exist only for the thumb, so the native track is
+   hidden and only the grab handle shows. Two of them sit on top of each other,
+   so the track must not swallow clicks — only the thumbs are interactive. */
+.trim-range { pointer-events: none; }
+.trim-range::-webkit-slider-runnable-track { background: transparent; height: 100%; }
+.trim-range::-moz-range-track { background: transparent; height: 100%; }
+.trim-range::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 24px;
+  border-radius: 4px;
+  background: #fff;
+  border: 2px solid #C778DD;
+  cursor: ew-resize;
+}
+.trim-range::-moz-range-thumb {
+  pointer-events: auto;
+  width: 14px;
+  height: 24px;
+  border-radius: 4px;
+  background: #fff;
+  border: 2px solid #C778DD;
+  cursor: ew-resize;
+}

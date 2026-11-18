@@ -1,29 +1,44 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { SERVICES } from "@/lib/services";
 
-export default function Footer() {
+export default async function Footer() {
+  // parthdev.in serves this same app; its footer carries Parth's name.
+  // Every page using Footer is force-dynamic, so reading the host is free.
+  const host = (await headers()).get("host") ?? "";
+  const parthdev = /^(www\.)?parthdev\.in(:\d+)?$/.test(host);
+  const brand = parthdev ? "Parth Patel" : "EZcods IT Solutions";
+  // parthdev.in shows a fixed year and no admin link.
+  const year = parthdev ? 2006 : new Date().getFullYear();
+
   return (
     <footer className="border-t border-[#ABB2BF] pt-8 pb-8 mt-32">
       <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12">
-        
-        {/* Left */}
         <div>
-           <div className="flex items-center gap-2 font-bold text-lg mb-4">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2H4V14H12V10H8V8H12V2ZM4 0C2.89543 0 2 0.89543 2 2V14C2 15.1046 2.89543 16 4 16H12C13.1046 16 14 15.1046 14 14V2C14 0.89543 13.1046 0 12 0H4Z" />
-                <path d="M6 4H10V6H6V4Z" fill="#282C33"/>
-              </svg>
-              <span>Parth</span>
-              <a href="mailto:parthmk85@gmail.com" className="text-[#ABB2BF] font-normal text-sm ml-4">parthmk85@gmail.com</a>
-           </div>
-           <p className="text-[#ABB2BF]">Web designer and full stack developer</p>
+          <div className="flex items-center gap-2 font-bold text-lg mb-4">
+            <img src="/ezcods-mark-light.png" alt="" className="h-5 w-auto" />
+            <span>{brand}</span>
+          </div>
+          <p className="text-[#ABB2BF] mb-2">Websites, e-commerce, mobile apps and custom CRM/ERP software.</p>
+          <a href="mailto:parthmk85@gmail.com" className="text-[#ABB2BF] text-sm hover:text-white">parthmk85@gmail.com</a>
         </div>
+        <nav className="grid grid-cols-2 gap-x-12 gap-y-2 text-sm text-[#ABB2BF]">
+          {SERVICES.map((s) => (
+            <Link key={s.slug} href={`/services/${s.slug}`} className="hover:text-white">{s.name}</Link>
+          ))}
+          <Link href="/work" className="hover:text-white">Our work</Link>
+          <Link href="/about-me" className="hover:text-white">About us</Link>
+          <Link href="/connect" className="hover:text-white">Book a call</Link>
+        </nav>
       </div>
-      
+
       <div className="text-center text-[#ABB2BF] text-sm flex flex-col items-center gap-2">
-         <span>&copy; Copyright 2022. Made by Parth</span>
-         <Link href="/admin" className="hover:text-[#C778DD] transition-colors underline decoration-[#C778DD] decoration-opacity-30">
-           Admin Panel
-         </Link>
+        <span>&copy; {year} {brand}</span>
+        {!parthdev && (
+          <Link href="/admin" className="hover:text-[#C778DD] transition-colors underline decoration-[#C778DD] decoration-opacity-30">
+            Admin Panel
+          </Link>
+        )}
       </div>
     </footer>
   );

@@ -2,6 +2,11 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import { getProjects } from "@/lib/data";
 
+// CMS content lives in data/db_fallback.json (or Mongo) and is read per-request.
+// Without this the page is prerendered at build time and admin edits never
+// reach the live site until the next rebuild.
+export const dynamic = "force-dynamic";
+
 export default async function Projects() {
   const projects = await getProjects() || [];
 
@@ -17,7 +22,7 @@ export default async function Projects() {
               <path fillRule="evenodd" clipRule="evenodd" d="M12 2H4V14H12V10H8V8H12V2ZM4 0C2.89543 0 2 0.89543 2 2V14C2 15.1046 2.89543 16 4 16H12C13.1046 16 14 15.1046 14 14V2C14 0.89543 13.1046 0 12 0H4Z" />
               <path d="M6 4H10V6H6V4Z" fill="#282C33"/>
             </svg>
-            <span>Parth Patel</span>
+            <span>Parth Badreshiya</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-8 text-[#ABB2BF] font-medium">

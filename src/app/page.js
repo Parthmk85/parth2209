@@ -1,10 +1,41 @@
 import React from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import { getProjects, getContent } from "@/lib/data";
+import { getContent } from "@/lib/data";
+import { headers } from "next/headers";
+import HeroSection from "@/components/hero/HeroSection";
+import { ServicesSection, SkillsSection, AboutSection } from "@/components/HomeSections";
+import ContactPhone from "@/components/ContactPhone";
+import ContactEnvelope from "@/components/ContactEnvelope";
+
+// CMS content lives in data/db_fallback.json (or Mongo) and is read per-request.
+// Without this the page is prerendered at build time and admin edits never
+// reach the live site until the next rebuild.
+export const dynamic = "force-dynamic";
+
+// Shown on the page and as FAQPage schema, so AI search can quote the answers.
+const FAQS = [
+  ["What does EZcods IT Solutions do?", "We are a software development company in India. We build business websites, e-commerce stores, Android and iOS apps, and custom CRM / ERP software."],
+  ["How much does a website or app cost?", "It depends on what you need. We quote after a free discovery call; the projects we take on range from under ₹50,000 to ₹10 lakh."],
+  ["Can I see your past work?", "Yes. Our work page lists live client websites, from simple business sites to e-commerce stores."],
+  ["Which technologies do you use?", "Next.js, React, Node.js, Flutter, React Native, PostgreSQL, MongoDB and .NET, chosen to fit the project."],
+  ["How do I start a project?", "Book a free discovery call on our website. We confirm on WhatsApp, understand your requirement, and share the right approach with an indicative timeline and budget."],
+];
+
+const STEPS = [
+  ["Discovery call", "A free call to understand your business and what you need."],
+  ["Plan & quote", "We suggest the right approach and share an indicative timeline and budget."],
+  ["Design & build", "We design, build and show you progress as we go."],
+  ["Launch", "We put it live on your domain and hand it over."],
+];
 
 export default async function Home() {
-  const dbProjects = await getProjects();
+  // parthdev.in serves this same app: it gets the 3D hero, ezcods.com keeps the
+  // CMS hero. Chosen here, not by a middleware rewrite: parthdev.in's nginx
+  // sends X-Forwarded-Proto, which turns rewrites into a proxy to
+  // https://localhost:3700 that 500s.
+  const host = (await headers()).get("host") ?? "";
+  const hero = /^(www\.)?parthdev\.in(:\d+)?$/.test(host) ? <HeroSection /> : null;
   const dbContent = await getContent();
 
   // Normalize content structure
@@ -16,10 +47,6 @@ export default async function Home() {
     reviews: dbContent?.reviews || []
   };
 
-  const projects = (dbProjects || [])
-    .filter(p => p.showOnHome)
-    .slice(0, 3);
-
   return (
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
 
@@ -27,42 +54,16 @@ export default async function Home() {
       {/* Main Content */}
       <div className="container mx-auto px-6 md:px-24 py-8 max-w-7xl">
         
-        {/* Navbar */}
-        <header className="flex justify-between items-center mb-20">
+        {/* Brand header (nav links removed on request) */}
+        <header className="flex items-center mb-20">
           <div className="flex items-center gap-2 font-bold text-lg">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2H4V14H12V10H8V8H12V2ZM4 0C2.89543 0 2 0.89543 2 2V14C2 15.1046 2.89543 16 4 16H12C13.1046 16 14 15.1046 14 14V2C14 0.89543 13.1046 0 12 0H4Z" />
-              <path d="M6 4H10V6H6V4Z" fill="#282C33"/>
-            </svg>
-            <span>Parth Patel</span>
+            <img src="/ezcods-mark-light.png" alt="EZcods IT Solutions" className="h-6 w-auto" />
+            <span>EZcods IT Solutions</span>
           </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-[#ABB2BF] font-medium">
-            <a href="#home" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>home
-            </a>
-            <a href="#works" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>works
-            </a>
-            <a href="#about-me" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>about-me
-            </a>
-            <a href="#contacts" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>contacts
-            </a>
-            <Link href="/admin" className="hover:text-white transition-colors group">
-              <span className="text-[#C778DD]">#</span>admin
-            </Link>
-            <div className="ml-4 flex items-center gap-1 cursor-pointer hover:text-white">
-              <span>EN</span>
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-            </div>
-          </nav>
         </header>
 
         {/* Hero Section */}
+        {hero ?? (
         <section className="flex flex-col md:flex-row items-center justify-between mb-32">
           {/* Hero Text */}
           <div className="max-w-xl z-10">
@@ -77,9 +78,12 @@ export default async function Home() {
             <p className="text-[#ABB2BF] mb-8 leading-relaxed max-w-md">
               {content.hero.subtext}
             </p>
-            <a href="#contacts" className="border border-[#C778DD] text-white py-2 px-4 hover:bg-[#C778DD] hover:bg-opacity-20 transition-all duration-300 font-medium text-sm inline-block">
-              Contact me !!
-            </a>
+            <Link href="/work" className="border border-[#C778DD] text-white py-2 px-4 hover:bg-[#C778DD] hover:bg-opacity-20 transition-all duration-300 font-medium text-sm inline-block">
+              View our past work
+            </Link>
+            <Link href="/connect" className="ml-3 bg-[#C778DD] text-white py-2 px-4 hover:opacity-90 transition-opacity font-medium text-sm inline-block">
+              Get connected
+            </Link>
           </div>
 
           {/* Hero Image / Graphics */}
@@ -99,7 +103,7 @@ export default async function Home() {
             <div className="relative z-10 w-[300px] h-[340px] md:w-[450px] md:h-[386px] grayscale hover:grayscale-0 transition-all duration-500">
                 <img 
                   src={content.hero.image || "https://via.placeholder.com/600x600/282c33/abb2bf?text=Parth"} 
-                  alt="Parth" 
+                  alt="Parth Badreshiya, founder of EZcods IT Solutions" 
                   className="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500"
                 />
                
@@ -116,184 +120,44 @@ export default async function Home() {
             {/* Status Badge */}
             <div className="absolute bottom-4 left-4 md:left-2 flex items-center gap-2 border border-[#ABB2BF] bg-[#282C33] p-2 text-[#ABB2BF] text-sm z-20 w-max">
                <div className="w-4 h-4 bg-[#C778DD]"></div>
-               <span>Currently working on <strong className="text-white">Portfolio</strong></span>
-            </div>
-          </div>
-        </section>
-
-        {/* Quote Section */}
-        <section className="flex justify-center mb-24 relative mt-20">
-             <div className="border border-[#ABB2BF] p-8 inline-block relative bg-[#282C33]">
-                 <div className="absolute -top-3 left-4 px-2 bg-[#282C33] text-2xl font-medium text-[#ABB2BF]">"</div>
-                 <h3 className="text-xl md:text-2xl font-medium text-white mb-2">
-                    With great power comes great electricity bill
-                 </h3>
-                 <div className="absolute -bottom-3 right-4 px-2 bg-[#282C33] text-2xl font-medium text-[#ABB2BF]">"</div>
-             </div>
-             <div className="border border-[#ABB2BF] border-t-0 p-4 absolute right-[20%] md:right-[30%] -bottom-14 bg-[#282C33]">
-                - Dr. Who
-             </div>
-        </section>
-
-        {/* Projects Section */}
-        <section id="works" className="mb-24">
-          <div className="flex justify-between items-center mb-12">
-            <div className="flex items-center gap-4 w-2/3">
-              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>projects</h2>
-              <div className="h-px bg-[#C778DD] w-full max-w-[500px]"></div>
-            </div>
-            <Link href="/projects" className="hidden md:flex items-center gap-2 text-white hover:text-[#C778DD] transition-colors">
-              View all ~~&gt;
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {projects.map((project) => (
-              <div key={project._id} className="border border-[#ABB2BF]">
-                <div className="h-[200px] border-b border-[#ABB2BF] overflow-hidden">
-                  <img src={project.image || null} alt={project.title} className="w-full h-full object-cover" />
-                </div>
-                <div className="p-2 border-b border-[#ABB2BF] text-[#ABB2BF]">
-                  {project.tech}
-                </div>
-                <div className="p-4">
-                  <h3 className="text-2xl font-medium mb-4 text-white">{project.title}</h3>
-                  <p className="text-[#ABB2BF] mb-4">{project.description}</p>
-                  <div className="flex gap-4">
-                    <a 
-                      href={project.link?.startsWith("http") ? project.link : `https://${project.link}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm flex items-center gap-2"
-                    >
-                      Live &lt;~&gt;
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        {content.skills.length > 0 && (
-          <section id="skills" className="mb-32">
-            <div className="flex items-center gap-4 mb-12">
-              <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>skills</h2>
-              <div className="h-px bg-[#C778DD] w-64"></div>
-            </div>
-
-          <div className="flex flex-col md:flex-row gap-16">
-            {/* Left Side - Decorations */}
-            <div className="hidden md:block w-1/3 relative">
-               {/* 5x5 Dots Top Left */}
-               <div className="absolute top-8 left-8 grid grid-cols-5 gap-4">
-                  {[...Array(25)].map((_, i) => (
-                      <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                  ))}
-               </div>
-
-               {/* Purple Squares Decoration */}
-               <div className="absolute bottom-12 left-20">
-                  <div className="w-20 h-20 border border-[#C778DD] absolute bottom-8 right-8"></div>
-                  <div className="w-20 h-20 border border-[#C778DD] absolute bottom-0 right-0"></div>
-               </div>
-               
-               {/* 5x5 Dots Bottom Right of this area */}
-               <div className="absolute bottom-32 left-44 grid grid-cols-5 gap-4">
-                  {[...Array(25)].map((_, i) => (
-                      <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                  ))}
-               </div>
-
-               {/* Random small square */}
-               <div className="absolute top-20 right-12 w-16 h-16 border border-[#ABB2BF]"></div>
-               <div className="absolute bottom-20 right-0 w-12 h-12 border border-[#ABB2BF]"></div>
-            </div>
-
-            {/* Right Side - Skills Grid */}
-            <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-min">
-               {content.skills.map((category, idx) => (
-                 <div key={idx} className="border border-[#ABB2BF] h-fit hover:border-[#C778DD] transition-all duration-300 group hover:shadow-[0_0_20px_rgba(199,120,221,0.1)]">
-                    <h4 className="border-b border-[#ABB2BF] p-2 font-semibold text-white group-hover:text-[#C778DD] transition-colors">{category.title}</h4>
-                    <div className="p-2 text-[#ABB2BF] flex flex-wrap gap-2">
-                      {category.skills.split(",").map((s, i) => (
-                        <span key={i} className="hover:text-white transition-colors cursor-default leading-relaxed">
-                          {s.trim()}
-                        </span>
-                      ))}
-                    </div>
-                 </div>
-               ))}
+               <span>Websites · Apps · CRM</span>
             </div>
           </div>
         </section>
         )}
 
-        {/* About Me Section */}
-        <section id="about-me" className="mb-32 relative">
-           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>about-me</h2>
-            <div className="h-px bg-[#C778DD] w-64"></div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+        }) }} />
+
+        {/* parthdev.in: service cards without "Learn more" links */}
+        <ServicesSection links={!hero} />
+
+        {/* Process */}
+        <section id="process" className="mb-32">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>how-we-work</h2>
+            <div className="h-px bg-[#C778DD] w-48"></div>
           </div>
-
-          <div className="flex flex-col md:flex-row justify-between gap-12">
-            
-            {/* Left Content */}
-            <div className="md:w-1/2 text-[#ABB2BF] leading-relaxed">
-              <p className="mb-8">
-                {content.about.text1}
-              </p>
-              <p className="mb-8">
-                {content.about.text2}
-              </p>
-              <p className="mb-8">
-                {content.about.text3}
-              </p>
-              <Link href="/about-me" className="border border-[#C778DD] px-4 py-2 text-white hover:bg-[#C778DD] hover:bg-opacity-20 transition-all font-medium text-sm inline-flex items-center gap-2">
-                Read more -&gt;
-              </Link>
-            </div>
-
-            {/* Right Image */}
-            <div className="md:w-1/2 relative flex justify-center">
-               <div className="relative">
-                  {/* Image */}
-                  <div className="w-[340px] h-[500px] border-b border-[#C778DD] relative z-10">
-                      <img 
-                        src={content.about.image || "https://via.placeholder.com/400x500/282c33/abb2bf?text=Parth"} 
-                        alt="Parth" 
-                        className="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500"
-                      />
-                  </div>
-
-                  {/* Decorations */}
-                  <div className="absolute top-12 -left-4 grid grid-cols-5 gap-4 z-20">
-                    {[...Array(25)].map((_, i) => (
-                        <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                    ))}
-                  </div>
-
-                  <div className="absolute bottom-16 -right-4 grid grid-cols-4 gap-4 z-20">
-                    {[...Array(20)].map((_, i) => (
-                        <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                    ))}
-                  </div>
-
-               </div>
-               
-               {/* Far right dots decoration */}
-               <div className="absolute top-1/2 right-0 transform -translate-y-1/2 grid grid-cols-2 gap-4">
-                    {[...Array(10)].map((_, i) => (
-                        <div key={i} className="w-1 h-1 bg-[#ABB2BF] rounded-full"></div>
-                    ))}
-               </div>
-            </div>
-          </div>
-          
-          {/* Decorative box on far left */}
-          <div className="absolute top-20 -left-20 w-32 h-40 border border-[#ABB2BF] opacity-50 hidden md:block"></div>
+          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {STEPS.map(([t, d], i) => (
+              <li key={t} className="border border-[#ABB2BF] p-4">
+                <span className="text-[#C778DD] text-sm">0{i + 1}</span>
+                <h3 className="font-semibold my-2">{t}</h3>
+                <p className="text-[#ABB2BF] text-sm leading-relaxed">{d}</p>
+              </li>
+            ))}
+          </ol>
         </section>
+
+        <SkillsSection skills={content.skills} parthdev={!!hero} />
+
+        <AboutSection
+          paragraphs={[content.about.text1, content.about.text2, content.about.text3]}
+          image={content.about.image}
+        />
 
         {/* Reviews Section */}
         {content.reviews.length > 0 && (
@@ -353,6 +217,22 @@ export default async function Home() {
           </section>
         )}
 
+        {/* FAQ */}
+        <section id="faq" className="mb-32">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-medium"><span className="text-[#C778DD]">#</span>faq</h2>
+            <div className="h-px bg-[#C778DD] w-32"></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
+            {FAQS.map(([q, a]) => (
+              <div key={q}>
+                <h3 className="font-semibold mb-2">{q}</h3>
+                <p className="text-[#ABB2BF] text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Contacts Section */}
         <section id="contacts" className="mb-32">
           <div className="flex items-center gap-4 mb-12">
@@ -360,18 +240,26 @@ export default async function Home() {
             <div className="h-px bg-[#C778DD] w-32"></div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between gap-12 relative">
+          <div className={hero ? "flex flex-col lg:flex-row lg:items-center justify-between gap-12 relative" : "flex flex-col md:flex-row justify-between gap-12 relative"}>
              {/* Left Text */}
-             <div className="md:w-1/2 text-[#ABB2BF]">
+             <div className={hero ? "lg:w-[32%] text-[#ABB2BF]" : "md:w-1/2 text-[#ABB2BF]"}>
                 <p className="mb-4">
-                  I&apos;m interested in freelance opportunities. However, if you have other request or question, don&apos;t hesitate to contact me
+                  Have a website, app or software idea? Tell us what your business needs and we&apos;ll suggest the right way to build it.
                 </p>
+                <Link href="/connect" className="bg-[#C778DD] text-white py-2 px-4 hover:opacity-90 transition-opacity font-medium text-sm inline-block">
+                  Book a free discovery call
+                </Link>
              </div>
 
+             {/* parthdev.in: floating 3D phone between the text and the box */}
+             {hero && <ContactPhone socials={content.socials} />}
+
              {/* Right Box */}
-             <div className="md:w-1/2 flex justify-end">
+             <div className={hero ? "lg:w-[28%] flex justify-end" : "md:w-1/2 flex justify-end"}>
+                {/* parthdev.in: 3D envelope letter; ezcods.com: the plain card */}
+                {hero ? <ContactEnvelope socials={content.socials} /> : (
                 <div className="border border-[#ABB2BF] p-4 min-w-[200px]">
-                   <h4 className="font-semibold text-white mb-4">Message me here</h4>
+                   <h4 className="font-semibold text-white mb-4">Message us here</h4>
                    <div className="flex flex-col gap-3">
                       {/* WhatsApp */}
                       {content.socials.whatsapp && (
@@ -417,6 +305,7 @@ export default async function Home() {
                       )}
                    </div>
                 </div>
+                )}
              </div>
              
              <div className="absolute top-1/2 left-[-60px] transform -translate-y-1/2 grid-cols-2 gap-4 hidden md:grid">

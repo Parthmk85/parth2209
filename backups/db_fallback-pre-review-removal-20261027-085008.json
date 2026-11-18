@@ -1,0 +1,478 @@
+{
+  "projects": [
+    {
+      "title": "glamora clothing brand",
+      "description": "this was my first usa project",
+      "image": "/uploads/1776835757355-Screenshot-2026-04-22-105656.png",
+      "tech": "nextjs , mongodb",
+      "link": "glamorafromusa.vercel.app",
+      "order": 0,
+      "_id": "1776836748789",
+      "createdAt": "2026-04-22T05:45:48.789Z",
+      "updatedAt": "2026-04-22T08:49:44.997Z",
+      "showOnHome": false
+    },
+    {
+      "title": "Sabka sathi degital service",
+      "description": "It a business growing coumpany",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844011/portfolio/eplgi2ilndj14c3mvqgq.png",
+      "tech": "nextjs , postgres",
+      "link": "sabkasaathidigitalservices.com",
+      "order": 0,
+      "_id": "1776844030911",
+      "createdAt": "2026-04-22T07:47:10.911Z",
+      "updatedAt": "2026-04-22T08:50:02.914Z",
+      "showOnHome": true
+    },
+    {
+      "title": "Skov Fashion",
+      "description": "This is a clothing brand located in Surat Gujarat",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844223/portfolio/cdvxu6kupybw3pgagdme.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "skovfashion.com",
+      "order": 0,
+      "_id": "1776844243313",
+      "createdAt": "2026-04-22T07:50:43.313Z",
+      "updatedAt": "2026-04-22T08:04:40.743Z",
+      "showOnHome": true
+    },
+    {
+      "title": "Rich Look Beauty Studio",
+      "description": "this is a beauty studio website",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844631/portfolio/t85mcska5zdoya0zdrsv.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "richlook18.in",
+      "order": 0,
+      "_id": "1776844639841",
+      "createdAt": "2026-04-22T07:57:19.841Z",
+      "updatedAt": "2026-04-22T07:57:19.841Z"
+    },
+    {
+      "title": "Emall world",
+      "description": "this is a ecommerce website ",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844748/portfolio/eykb3pprhd4gwnvbzirp.png",
+      "tech": "nextjs , mongodb , vps",
+      "link": "emallworld.com",
+      "order": 0,
+      "_id": "1776844757076",
+      "createdAt": "2026-04-22T07:59:17.076Z",
+      "updatedAt": "2026-04-22T07:59:17.076Z"
+    },
+    {
+      "title": "Vision of akash",
+      "description": "this is a portfoliyo website for a photo grapher",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776844802/portfolio/qkrrkz1nuymocyrhe3y6.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "https://vision-of-akash.vercel.app/",
+      "order": "0",
+      "_id": "1776844821485",
+      "createdAt": "2026-04-22T08:00:21.485Z",
+      "updatedAt": "2026-04-22T08:01:56.425Z"
+    },
+    {
+      "title": "Mehandi Artist",
+      "description": "This the portfoliyo website for a mehandi artist",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776845236/portfolio/lbdkytcpmtrkzretud6t.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "najima-mehandi-artist.in",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1776845252868",
+      "createdAt": "2026-04-22T08:07:32.868Z",
+      "updatedAt": "2026-04-22T08:49:54.879Z"
+    },
+    {
+      "title": "Mitti & Moongfali",
+      "description": "This is a private e-commerce website in which they sell the penuts",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776846937/portfolio/jhz6vicjvficyaifdxpk.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "https://penut-eta.vercel.app/",
+      "order": 0,
+      "showOnHome": true,
+      "_id": "1776846982146",
+      "createdAt": "2026-04-22T08:36:22.146Z",
+      "updatedAt": "2026-04-22T08:36:29.574Z"
+    },
+    {
+      "title": "Tech-ly",
+      "description": "This is a it coumpany wesite",
+      "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776847055/portfolio/wv24qgqnw2hwjqtsqyvg.png",
+      "tech": "nextjs , postgres , vps ",
+      "link": "tech-ly.in",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1776847075740",
+      "createdAt": "2026-04-22T08:37:55.740Z",
+      "updatedAt": "2026-04-22T08:37:55.740Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "https://ethicsconsumers.com/",
+      "category": "informational",
+      "media": "/uploads/1788270110343-8b37db7cf9ae.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788270136933",
+      "createdAt": "2026-09-01T13:42:16.933Z",
+      "updatedAt": "2026-09-01T13:42:16.933Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "dihans.in",
+      "category": "informational",
+      "media": "/uploads/1788270363866-dc37f7bc7ad3.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788270232852",
+      "createdAt": "2026-09-01T13:43:52.852Z",
+      "updatedAt": "2026-09-01T13:46:05.925Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "https://mechoraglobal.com/",
+      "category": "informational",
+      "media": "/uploads/1788271242361-b21d14232ad8.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788270513639",
+      "createdAt": "2026-09-01T13:48:33.639Z",
+      "updatedAt": "2026-09-01T14:00:45.634Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "zdreo.com",
+      "category": "animated",
+      "media": "/uploads/1788271215776-8937a17cc107.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271221788",
+      "createdAt": "2026-09-01T14:00:21.788Z",
+      "updatedAt": "2026-09-01T14:00:21.788Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "http://jaybhavanidairy.com/",
+      "category": "animated",
+      "media": "/uploads/1788271372622-ac09d439121a.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271375343",
+      "createdAt": "2026-09-01T14:02:55.343Z",
+      "updatedAt": "2026-09-01T14:02:55.343Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "https://aashirvadjewels.com/",
+      "category": "animated",
+      "media": "/uploads/1788271487655-c4c1b5200fab.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271491483",
+      "createdAt": "2026-09-01T14:04:51.483Z",
+      "updatedAt": "2026-09-01T14:04:51.483Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "skovfashion.com",
+      "category": "ecommerce",
+      "media": "/uploads/1788271605493-903057a9607f.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271611970",
+      "createdAt": "2026-09-01T14:06:51.970Z",
+      "updatedAt": "2026-09-01T14:06:51.970Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "tvakya.com",
+      "category": "ecommerce",
+      "media": "/uploads/1788271721925-d31d839fb82d.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271737722",
+      "createdAt": "2026-09-01T14:08:57.722Z",
+      "updatedAt": "2026-09-01T14:08:57.722Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "http://saladculture.com/",
+      "category": "ecommerce",
+      "media": "/uploads/1788271833636-3b7df287a5c3.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788271835243",
+      "createdAt": "2026-09-01T14:10:35.243Z",
+      "updatedAt": "2026-09-01T14:10:35.243Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "zoryelle.in",
+      "category": "animated",
+      "media": "/uploads/1788459003843-eab438c5bb38.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459008764",
+      "createdAt": "2026-09-03T18:10:08.764Z",
+      "updatedAt": "2026-09-03T18:10:08.764Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "caraadhar.com",
+      "category": "animated",
+      "media": "/uploads/1788459089046-129e8d3b2562.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459122068",
+      "createdAt": "2026-09-03T18:12:02.068Z",
+      "updatedAt": "2026-09-03T18:12:02.068Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "musafiradventure.com",
+      "category": "animated",
+      "media": "/uploads/1788459197549-758b27ec0a7f.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459201967",
+      "createdAt": "2026-09-03T18:13:21.967Z",
+      "updatedAt": "2026-09-03T18:13:21.967Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "niramayaorganic.com",
+      "category": "ecommerce",
+      "media": "/uploads/1788459298446-a8f28732a9ef.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459301088",
+      "createdAt": "2026-09-03T18:15:01.088Z",
+      "updatedAt": "2026-09-03T18:15:01.088Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "richlook18.in",
+      "category": "informational",
+      "media": "/uploads/1788459385780-b0f18f719b42.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459389240",
+      "createdAt": "2026-09-03T18:16:29.240Z",
+      "updatedAt": "2026-09-03T18:16:29.240Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "https://neurotric.com/",
+      "category": "informational",
+      "media": "/uploads/1788459517538-59d3974d139c.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459520441",
+      "createdAt": "2026-09-03T18:18:40.441Z",
+      "updatedAt": "2026-09-03T18:18:40.441Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "ezdocai.com",
+      "category": "ecommerce",
+      "media": "/uploads/1788459588928-2a608a40dac4.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459591775",
+      "createdAt": "2026-09-03T18:19:51.775Z",
+      "updatedAt": "2026-09-03T18:19:51.775Z"
+    },
+    {
+      "title": "",
+      "description": "",
+      "image": "",
+      "tech": "",
+      "link": "https://woodza.in/",
+      "category": "ecommerce",
+      "media": "/uploads/1788459685147-9fd9075807fe.mp4",
+      "mediaType": "video",
+      "order": 0,
+      "showOnHome": false,
+      "_id": "1788459687470",
+      "createdAt": "2026-09-03T18:21:27.470Z",
+      "updatedAt": "2026-09-03T18:21:27.470Z"
+    }
+  ],
+  "content": [
+    {
+      "section": "hero",
+      "data": {
+        "heading": "We build websites, online stores, apps and custom CRM software for growing businesses.",
+        "subtext": "EZcods IT Solutions is a software development company in India, founded by Parth Patel. Tell us what your business needs: we plan it, build it and launch it.",
+        "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776838685/portfolio/xrvfrhaixxuhunap8oav.jpg"
+      }
+    },
+    {
+      "section": "about",
+      "data": {
+        "text1": "EZcods IT Solutions is an Indian software development company. We build business websites, e-commerce stores, Android and iOS apps, and custom CRM and ERP software.",
+        "text2": "We start with how your business already works and build around it: fast, mobile-first websites, stores you can run from an admin panel, and software that fits your team instead of the other way round.",
+        "text3": "Every project starts with a free discovery call. You get a clear approach, an indicative timeline and budget, and a team that stays with you until it is live.",
+        "image": "https://res.cloudinary.com/dpet9memo/image/upload/v1776840485/portfolio/nu4p0qp2gssavrlsqfnc.png"
+      }
+    },
+    {
+      "section": "skills",
+      "data": [
+        {
+          "title": "Programming Languages",
+          "skills": "Python, JavaScript, TypeScript, C++, Java, PHP"
+        },
+        {
+          "title": "Web Development",
+          "skills": "HTML, CSS, Tailwind CSS, React.js, Next.js, Node.js, Express.js"
+        },
+        {
+          "title": "App Development",
+          "skills": "API with Python, Flutter, React Native"
+        },
+        {
+          "title": "Software Development (Desktop / Offline)",
+          "skills": "Electron.js, .NET, WinForms, WPF, PyQt, Tkinter"
+        },
+        {
+          "title": "Database Management",
+          "skills": "PostgreSQL, MySQL, MongoDB, SQLite, Prisma ORM"
+        },
+        {
+          "title": "ERP & Business Systems",
+          "skills": "Custom ERP Development, Inventory Management System, Billing Software, CRM Systems, Accounting Software"
+        },
+        {
+          "title": "E-commerce Development",
+          "skills": "Custom E-commerce Websites, Payment Gateway Integration, Order Management Systems"
+        },
+        {
+          "title": "Security & Optimization",
+          "skills": "Database Security, API Security, Performance Optimization, SEO Basics"
+        }
+      ]
+    },
+    {
+      "section": "socials",
+      "data": {
+        "whatsapp": "9725942209",
+        "instagram": "techly_the_freelancer",
+        "email": "parthmk85@gmail.com"
+      }
+    },
+    {
+      "section": "reviews",
+      "data": [
+        {
+          "name": "Ashish Kumar",
+          "feedback": "Portfoliyo website",
+          "productLink": "https://www.sabkasaathidigitalservices.com/",
+          "stars": 5,
+          "video": "https://res.cloudinary.com/dpet9memo/video/upload/v1776843698/portfolio/jks3lobasimjd8oeyjcc.mp4"
+        }
+      ]
+    }
+  ],
+  "leads": [
+    {
+      "_id": "HELLO1790178411242",
+      "source": "hello.ezcods.com",
+      "name": "PARTH RAMESHBHAI BADRESHIYA",
+      "dial": "+91",
+      "phone": "9274201601",
+      "need": "Other help",
+      "budget": "Below 50K",
+      "brief": "sadfsad",
+      "slot": "2026-09-24T12:30:00.000Z",
+      "ip": "43.250.159.211",
+      "createdAt": "2026-09-23T15:46:51.243Z"
+    },
+    {
+      "_id": "HELLO1790923015480",
+      "source": "hello.ezcods.com",
+      "name": "PARTH RAMESHBHAI BADRESHIYA",
+      "dial": "+91",
+      "phone": "9725942209",
+      "need": "Website",
+      "budget": "1L to 10L",
+      "brief": "huykghj",
+      "slot": "2026-10-03T07:30:00.000Z",
+      "ip": "103.206.136.45",
+      "createdAt": "2026-10-02T06:36:55.480Z"
+    }
+  ],
+  "applications": [
+    {
+      "_id": "d056c619-a086-46cb-a70c-04cdf51e251d",
+      "name": "sdfsfsf",
+      "file": "d056c619-a086-46cb-a70c-04cdf51e251d.pdf",
+      "originalName": "H_52042001.pdf",
+      "ip": "103.206.136.45",
+      "createdAt": "2026-10-06T08:09:18.460Z"
+    }
+  ]
+}
